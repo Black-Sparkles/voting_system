@@ -1,17 +1,18 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const redis = require("redis");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Placeholder Redis URL for cloud-init to replace
 const client = redis.createClient({
-  url: process.env.REDIS_URL || "redis://team1:6379",
+  url: '<yourRedisURL>', // this will be replaced dynamically via sed
 });
 
 client.on("error", (err) => console.error("Redis error:", err));
-
-client.connect();
+client.on("connect", () => console.log("Connected to Redis"));
 
 app.use(bodyParser.json());
 app.use(express.static("public"));
@@ -31,20 +32,16 @@ app.get("/results", async (req, res) => {
   res.json(results);
 });
 
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 client.connect().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-});
-client.on("error", (err) => {
-  console.error("Redis error:", err);
-});
-client.on("connect", () => {
-  console.log("Connected to Redis");
-});
-app.get("/health", (req, res) => {
-  res.send("OK");
-});
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
 });
