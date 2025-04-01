@@ -7,7 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const client = redis.createClient({
-  url: 'redis://:DmLWljBuOZq062KO5vH8pzkWPRIE4EMB9AzCaBO1jyE=@redisteam1.redis.cache.windows.net:6379'
+  //url: 'redis://:DmLWljBuOZq062KO5vH8pzkWPRIE4EMB9AzCaBO1jyE=@redisteam1.redis.cache.windows.net:6379'
+  url: <yourRedisURL>
 });
 
 // Redis connection events
