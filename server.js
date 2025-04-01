@@ -6,17 +6,18 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Placeholder Redis URL for cloud-init to replace
 const client = redis.createClient({
-  url: '<yourRedisURL>', // this will be replaced dynamically via sed
+  url: 'redis://:DmLWljBuOZq062KO5vH8pzkWPRIE4EMB9AzCaBO1jyE=@redisteam1.redis.cache.windows.net:6379'
 });
 
+// Redis connection events
 client.on("error", (err) => console.error("Redis error:", err));
-client.on("connect", () => console.log("Connected to Redis"));
+client.on("connect", () => console.log("✅ Connected to Redis"));
 
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
+// API routes
 app.post("/vote", async (req, res) => {
   const option = req.body.option;
   await client.incr(option);
@@ -40,8 +41,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-client.connect().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Start the app after Redis connects
+client.connect()
+  .then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error("❌ Failed to connect to Redis:", err);
+    process.exit(1);
   });
-});
