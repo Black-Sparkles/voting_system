@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Voting App</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Vote for Your Favorite Language</h1>
+    <form id="voteForm">
+      <button type="button" onclick="submitVote('JavaScript')">JavaScript</button>
+      <button type="button" onclick="submitVote('Python')">Python</button>
+      <button type="button" onclick="submitVote('Java')">Java</button>
+    </form>
+
+    <div class="results">
+      <h2>Live Results</h2>
+      <ul id="resultsList"></ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

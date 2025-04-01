@@ -1,0 +1,12 @@
+#cloud-config
+package_update: true
+packages:
+  - git
+  - curl
+runcmd:
+  - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  - apt-get install -y nodejs
+  - git clone https://github.com/Black-Sparkles/voting_system.git /home/azureuser/app
+  - cd /home/azureuser/app
+  - npm install
+  - nohup node server.js > app.log 2>&1 &
